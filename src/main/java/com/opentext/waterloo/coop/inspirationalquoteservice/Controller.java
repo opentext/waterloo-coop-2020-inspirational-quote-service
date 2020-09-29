@@ -1,6 +1,8 @@
 package com.opentext.waterloo.coop.inspirationalquoteservice;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +19,25 @@ public class Controller {
 
     @GetMapping("/quote")
     public Quote quote(@RequestParam(value = "name", defaultValue = "World") String name) throws Exception {
+
+        JSONObject response = queryQuoteAPI();
+        JSONObject quote = new JSONObject(response.getJSONObject("contents").getJSONArray("quotes").getString(0));
+
+        String quoteOfTheDay = quote.get("quote").toString();
+        String timestamp = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss").format(LocalDateTime.now());
+        String author = quote.get("author").toString();
+        String language = quote.get("language").toString();
+        String image = quote.get("background").toString();
+        String permalink = response.getJSONObject("copyright").get("url").toString();
+
+        //missing numberOfCalls
+        return new Quote(quoteOfTheDay, timestamp, -1, author, language, image, permalink);
+//        Quote(String quoteOfTheDay, String timestamp, int numberOfCalls, String author, String language, String image, String permalink)
+    }
+
+    @Cacheable("quote")
+    private JSONObject queryQuoteAPI() throws JSONException {
+
         //fetch live response
         String builder = null;
         try {
@@ -50,17 +71,7 @@ public class Controller {
 //        fileReader.close();
 
         JSONObject json = new JSONObject(builder.toString());
-        JSONObject quote = new JSONObject(json.getJSONObject("contents").getJSONArray("quotes").getString(0));
 
-        String quoteOfTheDay = quote.get("quote").toString();
-        String timestamp = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss").format(LocalDateTime.now());
-        String author = quote.get("author").toString();
-        String language = quote.get("language").toString();
-        String image = quote.get("background").toString();
-        String permalink = json.getJSONObject("copyright").get("url").toString();
-
-        //missing numberOfCalls
-        return new Quote(quoteOfTheDay, timestamp, -1, author, language, image, permalink);
-//        Quote(String quoteOfTheDay, String timestamp, int numberOfCalls, String author, String language, String image, String permalink)
+        return json;
     }
 }
