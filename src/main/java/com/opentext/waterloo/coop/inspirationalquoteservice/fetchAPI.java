@@ -44,8 +44,7 @@ public class fetchAPI {
         } catch (Exception e){
             System.out.println("Error occured " + e.getMessage());
         }
-
-        JSONObject json = new JSONObject(builder.toString());
+        JSONObject json = new JSONObject(builder);
         return json;
     }
 }
