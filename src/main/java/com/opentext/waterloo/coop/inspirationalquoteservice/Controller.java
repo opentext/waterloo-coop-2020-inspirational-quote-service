@@ -62,5 +62,6 @@ public class Controller {
         //missing numberOfCalls
         return new Quote(quoteOfTheDay, timestamp, -1, author, language, image, permalink);
 //        Quote(String quoteOfTheDay, String timestamp, int numberOfCalls, String author, String language, String image, String permalink)
+
     }
 }
