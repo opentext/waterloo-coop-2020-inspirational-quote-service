@@ -16,18 +16,9 @@ import java.time.format.DateTimeFormatter;
 @RestController
 public class Controller {
 
+    @Cacheable("quotes")
     @GetMapping("/quote")
     public Quote quote(@RequestParam(value = "name", defaultValue = "World") String name) throws Exception {
-
-
-//        Quote(String quoteOfTheDay, String timestamp, int numberOfCalls, String author, String language, String image, String permalink)
-        Quote quote = fetchQuoteFromAPI();
-
-        return quote;
-    }
-
-    @Cacheable
-    private Quote fetchQuoteFromAPI(){
         //fetch live response
         String builder = null;
         try {
