@@ -37,17 +37,17 @@ public class Controller {
             System.out.println("Error occured " + e.getMessage());
         }
 
-        //read local json file
-        Resource resource = new ClassPathResource("plain.json");
-        File file = resource.getFile();
-
-        BufferedReader fileReader = new BufferedReader(new FileReader(file));
-        StringBuilder builder = new StringBuilder();
-        String r;
-        while ((r=fileReader.readLine())!=null) {
-            builder.append(r);
-        }
-        fileReader.close();
+//        //read local json file
+//        Resource resource = new ClassPathResource("plain.json");
+//        File file = resource.getFile();
+//
+//        BufferedReader fileReader = new BufferedReader(new FileReader(file));
+//        StringBuilder builder = new StringBuilder();
+//        String r;
+//        while ((r=fileReader.readLine())!=null) {
+//            builder.append(r);
+//        }
+//        fileReader.close();
 
         JSONObject json = new JSONObject(builder.toString());
         JSONObject quote = new JSONObject(json.getJSONObject("contents").getJSONArray("quotes").getString(0));

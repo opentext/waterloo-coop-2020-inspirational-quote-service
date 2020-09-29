@@ -10,16 +10,16 @@ public class SimpleQuoteRepository implements QuoteRepository{
     @Cacheable("Quote")
     public Quote getByQuote(String quoteOfTheDay, String timeStamp,
                                   int numberOfCalls, String author, String language, String image, String permalink) {
-        simulateSlowService();
+//        simulateSlowService();
         return new Quote(quoteOfTheDay, timeStamp,numberOfCalls, language, language, image, permalink);
     }
 
-    private void simulateSlowService(){
-        try{
-            long time = 3000L;
-            Thread.sleep(time);
-        }catch(InterruptedException e){
-            throw new IllegalStateException(e);
-        }
-    }
+//    private void simulateSlowService(){
+//        try{
+//            long time = 3000L;
+//            Thread.sleep(time);
+//        }catch(InterruptedException e){
+//            throw new IllegalStateException(e);
+//        }
+//    }
 }
