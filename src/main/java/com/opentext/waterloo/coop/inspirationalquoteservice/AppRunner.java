@@ -18,11 +18,11 @@ public class AppRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         logger.info(".... Fetching quotes");
-//        logger.info("isbn-1234 -->" + QuoteRepository.getByQuote("isbn-1234"));
-//        logger.info("isbn-4567 -->" + QuoteRepository.getByQuote("isbn-4567"));
-//        logger.info("isbn-1234 -->" + QuoteRepository.getByQuote("isbn-1234"));
-//        logger.info("isbn-4567 -->" + QuoteRepository.getByQuote("isbn-4567"));
-//        logger.info("isbn-1234 -->" + QuoteRepository.getByQuote("isbn-1234"));
-//        logger.info("isbn-1234 -->" + QuoteRepository.getByQuote("isbn-1234"));
+//        logger.info("isbn-1234 -->" + QuoteRepository.getByQuote("isbn-1234", "hello world"));
+//        logger.info("isbn-4567 -->" + QuoteRepository.getByQuote("isbn-4567", "hello world2"));
+//        logger.info("isbn-1234 -->" + QuoteRepository.getByQuote("isbn-1234", "hello world3"));
+//        logger.info("isbn-4567 -->" + QuoteRepository.getByQuote("isbn-4567", "hello world4"));
+//        logger.info("isbn-1234 -->" + QuoteRepository.getByQuote("isbn-1234", "hello world5"));
+//        logger.info("isbn-1234 -->" + QuoteRepository.getByQuote("isbn-1234", "hello world6"));
     }
 }

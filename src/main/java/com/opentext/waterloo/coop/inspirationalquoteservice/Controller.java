@@ -37,17 +37,17 @@ public class Controller {
             System.out.println("Error occured " + e.getMessage());
         }
 
-//        //read local json file
-//        Resource resource = new ClassPathResource("plain.json");
-//        File file = resource.getFile();
-//
-//        BufferedReader fileReader = new BufferedReader(new FileReader(file));
-//        StringBuilder builder = new StringBuilder();
-//        String r;
-//        while ((r=fileReader.readLine())!=null) {
-//            builder.append(r);
-//        }
-//        fileReader.close();
+        //read local json file
+        Resource resource = new ClassPathResource("plain.json");
+        File file = resource.getFile();
+
+        BufferedReader fileReader = new BufferedReader(new FileReader(file));
+        StringBuilder builder = new StringBuilder();
+        String r;
+        while ((r=fileReader.readLine())!=null) {
+            builder.append(r);
+        }
+        fileReader.close();
 
         JSONObject json = new JSONObject(builder.toString());
         JSONObject quote = new JSONObject(json.getJSONObject("contents").getJSONArray("quotes").getString(0));
@@ -58,7 +58,6 @@ public class Controller {
         String language = quote.get("language").toString();
         String image = quote.get("background").toString();
         String permalink = json.getJSONObject("copyright").get("url").toString();
-
         //missing numberOfCalls
         return new Quote(quoteOfTheDay, timestamp, -1, author, language, image, permalink);
 //        Quote(String quoteOfTheDay, String timestamp, int numberOfCalls, String author, String language, String image, String permalink)

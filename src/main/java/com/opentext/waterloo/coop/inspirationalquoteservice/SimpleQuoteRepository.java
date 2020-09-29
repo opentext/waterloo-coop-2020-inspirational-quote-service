@@ -8,9 +8,10 @@ public class SimpleQuoteRepository implements QuoteRepository{
 
     @Override
     @Cacheable("Quote")
-    public Quote getByQuote(String quoteOfTheDay) {
+    public Quote getByQuote(String quoteOfTheDay, String timeStamp,
+                                  int numberOfCalls, String author, String language, String image, String permalink) {
         simulateSlowService();
-        return new Quote(quoteOfTheDay, "Some Quote", 1, "Benjamin", "English", "", "");
+        return new Quote(quoteOfTheDay, timeStamp,numberOfCalls, language, language, image, permalink);
     }
 
     private void simulateSlowService(){
