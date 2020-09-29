@@ -62,6 +62,6 @@ public class Controller {
 
 
 
-        return new Quote(-1, quote.getString("quote"));
+        return new Quote(quote.getString("quote"), "Placeholder timestamp", 0, "Me", "English", "", "");
     }
 }
