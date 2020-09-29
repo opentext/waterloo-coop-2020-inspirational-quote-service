@@ -37,4 +37,17 @@ public class Quote {
     public String getPermalink() {
         return permalink;
     }
+
+    @Override
+    public String toString() {
+        return "Quote{" +
+                "quoteOfTheDay='" + quoteOfTheDay + '\'' +
+                ", timestamp='" + timestamp + '\'' +
+                ", numberOfCalls=" + numberOfCalls +
+                ", author='" + author + '\'' +
+                ", language='" + language + '\'' +
+                ", image='" + image + '\'' +
+                ", permalink='" + permalink + '\'' +
+                '}';
+    }
 }

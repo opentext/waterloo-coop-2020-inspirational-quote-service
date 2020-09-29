@@ -3,7 +3,6 @@ package com.opentext.waterloo.coop.inspirationalquoteservice;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -13,16 +12,18 @@ import java.time.format.DateTimeFormatter;
 public class Controller {
 
     @Autowired
-    private final fetchAPI response;
+    private final LocalQuoteRepository localQuoteRepository;
+    private final RemoteQuoteRepository remoteQuoteRepository;
 
-    public Controller(fetchAPI result) {
-        this.response = result;
+    public Controller(LocalQuoteRepository result, RemoteQuoteRepository remoteQuoteRepository) {
+        this.localQuoteRepository = result;
+        this.remoteQuoteRepository = remoteQuoteRepository;
     }
 
     @GetMapping("/quote")
-    public Quote quote(@RequestParam(value = "name", defaultValue = "World") String name) throws Exception {
+    public Quote quote() throws Exception {
 
-        JSONObject json = response.getAPI();
+        JSONObject json = remoteQuoteRepository.fetchJSON();
         JSONObject quote = new JSONObject(json.getJSONObject("contents").getJSONArray("quotes").getString(0));
 
         String quoteOfTheDay = quote.get("quote").toString();
@@ -35,5 +36,6 @@ public class Controller {
         //missing numberOfCalls
         return new Quote(quoteOfTheDay, timestamp, -1, author, language, image, permalink);
 //        Quote(String quoteOfTheDay, String timestamp, int numberOfCalls, String author, String language, String image, String permalink)
+
     }
 }
