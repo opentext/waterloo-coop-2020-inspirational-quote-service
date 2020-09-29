@@ -1,7 +1,17 @@
 package com.opentext.waterloo.coop.inspirationalquoteservice;
 
-public interface QuoteRepository {
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 
-    Quote get();
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+public class QuoteRepository {
+
 
 }

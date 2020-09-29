@@ -22,6 +22,11 @@ public class Quote {
     public String getTimestamp() {
         return timestamp;
     }
+
+//    public void setTimestamp( String newValue) {
+//        timestamp = newValue;
+//    }
+
     public int getNumberOfCalls() {
         return numberOfCalls;
     }
