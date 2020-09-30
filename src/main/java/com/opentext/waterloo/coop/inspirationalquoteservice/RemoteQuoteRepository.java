@@ -1,19 +1,23 @@
 package com.opentext.waterloo.coop.inspirationalquoteservice;
 
-import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Component
 public class RemoteQuoteRepository implements QuoteRepository{
     @Override
+    //scheduled flush at midnight
+    @Scheduled(cron = "0 0/10 0/24 ? * * *")
+    @CacheEvict(value = "quote", allEntries = true)
+    @Cacheable("quote")
     public JSONObject fetchJSON() throws Exception {
 
         //fetch live response

@@ -1,9 +1,11 @@
 package com.opentext.waterloo.coop.inspirationalquoteservice;
 
 import org.json.JSONObject;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -12,7 +14,11 @@ import java.io.FileReader;
 
 @Component
 public class LocalQuoteRepository implements QuoteRepository{
+
     @Override
+    //scheduled flush at midnight
+    @Scheduled(cron = "0 0/10 0/24 ? * * *")
+    @CacheEvict(value = "quote", allEntries = true)
     @Cacheable("quote")
     public JSONObject fetchJSON() throws Exception {
 
@@ -27,7 +33,7 @@ public class LocalQuoteRepository implements QuoteRepository{
             builder.append(r);
         }
         fileReader.close();
-
         return new JSONObject(builder.toString());
     }
+
 }
