@@ -15,7 +15,7 @@ import java.net.URL;
 public class RemoteQuoteRepository implements QuoteRepository{
     @Override
     //scheduled flush at midnight
-    @Scheduled(cron = "0 0/10 0/24 ? * * *")
+    @Scheduled(cron = "0 0 0 * * ?")
     @CacheEvict(value = "quote", allEntries = true)
     @Cacheable("quote")
     public JSONObject fetchJSON() throws Exception {
