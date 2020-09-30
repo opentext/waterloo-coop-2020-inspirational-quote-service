@@ -11,17 +11,20 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Hashtable;
 import java.util.Optional;
 
 @RestController
 public class Controller {
     static int numberOfCalls = 0;
+    static Hashtable<String, Integer> ip_address = new Hashtable<String, Integer>();
+
     @Autowired
-    private final LocalQuoteRepository localQuoteRepository;
+    private final QuoteRepository localQuoteRepository;
     @Autowired
     private final QuoteRepository remoteQuoteRepository;
 
-    public Controller(LocalQuoteRepository localQuoteRepository, QuoteRepository remoteQuoteRepository) {
+    public Controller(QuoteRepository localQuoteRepository, QuoteRepository remoteQuoteRepository) {
         this.localQuoteRepository = localQuoteRepository;
         this.remoteQuoteRepository = remoteQuoteRepository;
     }
@@ -42,9 +45,9 @@ public class Controller {
         String ip = fetchClientIpAddr();
         //try to fetch online api quote
         try {
-            json = localQuoteRepository.fetchJSON();
-        } catch (Exception e) { //failed, try to fetch locally stored json
             json = remoteQuoteRepository.fetchJSON();
+        } catch (Exception e) { //failed, try to fetch locally stored json
+            json = localQuoteRepository.fetchJSON();
         }
         JSONObject quote = new JSONObject(json.getJSONObject("contents").getJSONArray("quotes").getString(0));
 
@@ -54,13 +57,13 @@ public class Controller {
         String language = quote.get("language").toString();
         String image = quote.get("background").toString();
         String permalink = json.getJSONObject("copyright").get("url").toString();
-
+        ip_address.put(ip,numberOfCalls);
         if (ip == fetchClientIpAddr()){
             numberOfCalls += 1;
         }
 
         //missing numberOfCalls
-        return new Quote(quoteOfTheDay, timestamp, numberOfCalls, author, language, image, permalink);
+        return new Quote(quoteOfTheDay, timestamp, ip_address.get(fetchClientIpAddr()), author, language, image, permalink);
 //        Quote(String quoteOfTheDay, String timestamp, int numberOfCalls, String author, String language, String image, String permalink)
 
     }
