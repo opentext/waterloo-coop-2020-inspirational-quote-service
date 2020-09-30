@@ -2,6 +2,7 @@ package com.opentext.waterloo.coop.inspirationalquoteservice;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,6 +39,13 @@ public class Controller {
         return ip;
     }
 
+    public JSONObject remoteFetchJSON() throws Exception {
+        return remoteQuoteRepository.fetchJSON();
+    }
+    public JSONObject localFetchJSON() throws Exception {
+        return localQuoteRepository.fetchJSON();
+    }
+
     @GetMapping("/quote")
     public Quote quote() throws Exception {
 
@@ -45,9 +53,9 @@ public class Controller {
         String ip = fetchClientIpAddr();
         //try to fetch online api quote
         try {
-            json = remoteQuoteRepository.fetchJSON();
+            json = remoteFetchJSON();
         } catch (Exception e) { //failed, try to fetch locally stored json
-            json = localQuoteRepository.fetchJSON();
+            json = localFetchJSON();
         }
         JSONObject quote = new JSONObject(json.getJSONObject("contents").getJSONArray("quotes").getString(0));
 

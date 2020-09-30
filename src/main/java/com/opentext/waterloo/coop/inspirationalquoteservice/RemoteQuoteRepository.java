@@ -1,6 +1,7 @@
 package com.opentext.waterloo.coop.inspirationalquoteservice;
 
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -14,10 +15,8 @@ import java.net.URL;
 @Component
 public class RemoteQuoteRepository implements QuoteRepository{
     @Override
-    //scheduled flush at midnight
-    @Scheduled(cron = "0 0 0 * * ?")
-    @CacheEvict(value = "quote", allEntries = true)
     @Cacheable("quote")
+    @Qualifier("remoteQuoteRepository")
     public JSONObject fetchJSON() throws Exception {
 
         //fetch live response
@@ -42,4 +41,9 @@ public class RemoteQuoteRepository implements QuoteRepository{
 
         return new JSONObject(builder);
     }
+
+    //scheduled flush at midnight
+    @Scheduled(cron = "0 0 0 * * ?")
+    @CacheEvict(value = "quote", allEntries = true)
+    public void clearCache() {}
 }

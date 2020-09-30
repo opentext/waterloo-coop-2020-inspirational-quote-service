@@ -1,6 +1,7 @@
 package com.opentext.waterloo.coop.inspirationalquoteservice;
 
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.ClassPathResource;
@@ -14,12 +15,8 @@ import java.io.FileReader;
 
 @Component
 public class LocalQuoteRepository implements QuoteRepository{
-
     @Override
-    //scheduled flush at midnight
-    @Scheduled(cron = "0 0 0 * * ?")
-    @CacheEvict(value = "quote", allEntries = true)
-    @Cacheable("quote")
+    @Qualifier("localQuoteRepository")
     public JSONObject fetchJSON() throws Exception {
 
         //read local json file
@@ -35,5 +32,4 @@ public class LocalQuoteRepository implements QuoteRepository{
         fileReader.close();
         return new JSONObject(builder.toString());
     }
-
 }
