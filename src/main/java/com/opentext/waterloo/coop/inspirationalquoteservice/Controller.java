@@ -12,18 +12,25 @@ import java.time.format.DateTimeFormatter;
 public class Controller {
 
     @Autowired
-    private final LocalQuoteRepository localQuoteRepository;
-    private final RemoteQuoteRepository remoteQuoteRepository;
+    private final QuoteRepository localQuoteRepository;
+    @Autowired
+    private final QuoteRepository remoteQuoteRepository;
 
-    public Controller(LocalQuoteRepository result, RemoteQuoteRepository remoteQuoteRepository) {
-        this.localQuoteRepository = result;
+    public Controller(QuoteRepository localQuoteRepository, QuoteRepository remoteQuoteRepository) {
+        this.localQuoteRepository = localQuoteRepository;
         this.remoteQuoteRepository = remoteQuoteRepository;
     }
 
     @GetMapping("/quote")
     public Quote quote() throws Exception {
 
-        JSONObject json = remoteQuoteRepository.fetchJSON();
+        JSONObject json;
+        //try to fetch online api quote
+        try {
+            json = remoteQuoteRepository.fetchJSON();
+        } catch (Exception e) { //failed, try to fetch locally stored json
+            json = localQuoteRepository.fetchJSON();
+        }
         JSONObject quote = new JSONObject(json.getJSONObject("contents").getJSONArray("quotes").getString(0));
 
         String quoteOfTheDay = quote.get("quote").toString();
