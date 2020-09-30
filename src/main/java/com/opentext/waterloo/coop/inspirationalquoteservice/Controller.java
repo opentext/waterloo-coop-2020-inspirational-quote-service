@@ -1,55 +1,51 @@
 package com.opentext.waterloo.coop.inspirationalquoteservice;
 
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @RestController
 public class Controller {
+    static int numberOfCalls = 0;
+    @Autowired
+    private final QuoteRepository localQuoteRepository;
+    @Autowired
+    private final QuoteRepository remoteQuoteRepository;
+
+    public Controller(QuoteRepository localQuoteRepository, QuoteRepository remoteQuoteRepository) {
+        this.localQuoteRepository = localQuoteRepository;
+        this.remoteQuoteRepository = remoteQuoteRepository;
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    protected String fetchClientIpAddr(){
+        HttpServletRequest request = ((ServletRequestAttributes)(RequestContextHolder.getRequestAttributes())).getRequest();
+        String ip = Optional.ofNullable(request.getHeader("X-FORWARDED-FOR")).orElse(request.getRemoteAddr());
+        if (ip.equals("0:0:0:0:0:0:1")) ip = "127.0.0.1";
+//        Assert.isTrue(ip.chars().filter($ -> $ == '.').count() == 3,"Illegal IP:" + ip);
+        return ip;
+    }
 
     @GetMapping("/quote")
-    public Quote quote(@RequestParam(value = "name", defaultValue = "World") String name) throws Exception {
-        //fetch live response
-        String builder = null;
+    public Quote quote() throws Exception {
+
+        JSONObject json;
+        String ip = fetchClientIpAddr();
+        //try to fetch online api quote
         try {
-            URL url = new URL("https://quotes.rest/qod?category=inspire");
-            HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
-            urlc.setRequestMethod("GET");
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(urlc.getInputStream()));
-            StringBuilder sb = new StringBuilder();
-            String line;
-
-            while ((line=br.readLine())!=null) {
-                sb.append(line).append('\n');
-            }
-            br.close();
-            builder = sb.toString();
-        } catch (Exception e){
-            System.out.println("Error occured " + e.getMessage());
+            json = remoteQuoteRepository.fetchJSON();
+        } catch (Exception e) { //failed, try to fetch locally stored json
+            json = localQuoteRepository.fetchJSON();
         }
-
-//        //read local json file
-//        Resource resource = new ClassPathResource("plain.json");
-//        File file = resource.getFile();
-//
-//        BufferedReader fileReader = new BufferedReader(new FileReader(file));
-//        StringBuilder builder = new StringBuilder();
-//        String r;
-//        while ((r=fileReader.readLine())!=null) {
-//            builder.append(r);
-//        }
-//        fileReader.close();
-
-        JSONObject json = new JSONObject(builder.toString());
         JSONObject quote = new JSONObject(json.getJSONObject("contents").getJSONArray("quotes").getString(0));
 
         String quoteOfTheDay = quote.get("quote").toString();
@@ -58,8 +54,13 @@ public class Controller {
         String language = quote.get("language").toString();
         String image = quote.get("background").toString();
         String permalink = json.getJSONObject("copyright").get("url").toString();
+
+        if (ip == fetchClientIpAddr()){
+            numberOfCalls += 1;
+        }
+
         //missing numberOfCalls
-        return new Quote(quoteOfTheDay, timestamp, -1, author, language, image, permalink);
+        return new Quote(quoteOfTheDay, timestamp, numberOfCalls, author, language, image, permalink);
 //        Quote(String quoteOfTheDay, String timestamp, int numberOfCalls, String author, String language, String image, String permalink)
 
     }

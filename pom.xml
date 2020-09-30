@@ -46,6 +46,10 @@
             <version>0.0.20131108.vaadin1</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
