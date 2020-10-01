@@ -17,7 +17,7 @@ import java.util.Optional;
 public class Controller {
     static int numberOfCalls = 0;
     static Hashtable<String, Integer> ip_address = new Hashtable<String, Integer>();
-
+    Globalcounter
     @Autowired
     private final QuoteRepository localQuoteRepository;
     @Autowired
