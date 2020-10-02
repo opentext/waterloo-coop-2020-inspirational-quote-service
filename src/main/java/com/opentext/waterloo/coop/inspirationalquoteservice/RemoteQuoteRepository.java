@@ -36,7 +36,7 @@ public class RemoteQuoteRepository implements QuoteRepository{
             br.close();
             builder = sb.toString();
         } catch (Exception e){
-            System.out.println("Error occured " + e.getMessage());
+            System.out.println("Error occurred " + e.getMessage());
         }
 
         return new JSONObject(builder);
