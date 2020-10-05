@@ -12,9 +12,6 @@ import java.time.format.DateTimeFormatter;
 
 @RestController
 public class Controller {
-//    static int totalCounter = 0;
-//    static int numberOfCalls = 0;
-//    static Hashtable<String, Integer> ip_address = new Hashtable<String, Integer>();
 
     private static final Logger log = LoggerFactory.getLogger(InspirationalQuoteServiceApplication.class);
 
@@ -45,8 +42,10 @@ public class Controller {
         JSONObject json;
         //try to fetch online api quote
         try {
+            log.info("Fetching live quote from api...");
             json = remoteFetchJSON();
         } catch (Exception e) { //failed, try to fetch locally stored json
+            log.error("Live quote fetch failed! Returning local json file..." + e.getMessage());
             json = localFetchJSON();
         }
         JSONObject quote = new JSONObject(json.getJSONObject("contents").getJSONArray("quotes").getString(0));
@@ -59,7 +58,7 @@ public class Controller {
         String permalink = json.getJSONObject("copyright").get("url").toString();
 
         Quote result = new Quote(quoteOfTheDay, timestamp, numbersOfCalls.getNumberOfCalls(), author, language, image, permalink);
-        log.info(result.toString());
+        log.info("Quote has been created: " + "Client IP:" + numbersOfCalls.fetchClientIpAddr() + ", Number of Calls:" + numbersOfCalls.getNumberOfCalls() + ", Time Stamp:" + timestamp);
         return result;
     }
 }
