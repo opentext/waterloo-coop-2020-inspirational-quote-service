@@ -13,14 +13,20 @@ public class NumbersOfCalls {
     private static int totalCounter = 0;
     static Hashtable<String, Integer> ip_address = new Hashtable<String, Integer>();
 
+    protected String fetchClientIpAddrAndUpdate(){
+        HttpServletRequest request = ((ServletRequestAttributes)(RequestContextHolder.getRequestAttributes())).getRequest();
+        String ip = Optional.ofNullable(request.getHeader("X-FORWARDED-FOR")).orElse(request.getRemoteAddr());
+        if (ip.equals("0:0:0:0:0:0:0:1")) ip = "127.0.0.1";
+        updateCounter(ip);
+        return ip;
+    }
+
     protected String fetchClientIpAddr(){
         HttpServletRequest request = ((ServletRequestAttributes)(RequestContextHolder.getRequestAttributes())).getRequest();
         String ip = Optional.ofNullable(request.getHeader("X-FORWARDED-FOR")).orElse(request.getRemoteAddr());
-        if (ip.equals("0:0:0:0:0:0:1")) ip = "127.0.0.1";
-        updateCounter(ip);
+        if (ip.equals("0:0:0:0:0:0:0:1")) ip = "127.0.0.1";
         return ip;
-    };
-
+    }
 
     public void updateCounter(String ip){
         if (ip_address.containsKey(ip)){
@@ -31,15 +37,10 @@ public class NumbersOfCalls {
         totalCounter +=1;
     }
 
-//    public int getTotalCounter(){
-//        return totalCounter;
-//    }
-
+    public int getNumberOfCallsAndUpdate(){
+        return ip_address.get(fetchClientIpAddrAndUpdate());
+    }
     public int getNumberOfCalls(){
         return ip_address.get(fetchClientIpAddr());
     }
-
-//    public Hashtable getIpHashtable(){
-//        return ip_address;
-//    }
 }

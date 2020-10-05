@@ -57,7 +57,7 @@ public class Controller {
         String image = quote.get("background").toString();
         String permalink = json.getJSONObject("copyright").get("url").toString();
 
-        Quote result = new Quote(quoteOfTheDay, timestamp, numbersOfCalls.getNumberOfCalls(), author, language, image, permalink);
+        Quote result = new Quote(quoteOfTheDay, timestamp, numbersOfCalls.getNumberOfCallsAndUpdate(), author, language, image, permalink);
         log.info("Quote has been created: " + "Client IP:" + numbersOfCalls.fetchClientIpAddr() + ", Number of Calls:" + numbersOfCalls.getNumberOfCalls() + ", Time Stamp:" + timestamp);
         return result;
     }
