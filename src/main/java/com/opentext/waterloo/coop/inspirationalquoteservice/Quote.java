@@ -1,5 +1,7 @@
 package com.opentext.waterloo.coop.inspirationalquoteservice;
+
 public class Quote {
+
     private final String quoteOfTheDay;
     private final String timestamp;
     private final int numberOfCalls;
@@ -7,6 +9,7 @@ public class Quote {
     private final String language;
     private final String image;
     private final String permalink;
+
     public Quote(String quoteOfTheDay, String timestamp, int numberOfCalls, String author, String language, String image, String permalink) {
         this.quoteOfTheDay = quoteOfTheDay;
         this.timestamp = timestamp;
@@ -16,6 +19,7 @@ public class Quote {
         this.image = image;
         this.permalink = permalink;
     }
+
     public String getQuoteOfTheDay() {
         return quoteOfTheDay;
     }

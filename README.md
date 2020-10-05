@@ -24,3 +24,10 @@ The fetchJSON() function has @Qualifier to be recognized by @Autowired in Contro
 
 Quote:
 A POJO to store the necessary information to be displayed by the webserver.
+
+
+## How to run ##
+1. after pull from this branch run `docker compose up`
+2. run `mvn spring-boot:run` or run the project from IDE
+3. open `localhost:9000/` to check the graylog
+4. create an **TCP** input and check the logging
