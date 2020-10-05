@@ -1,7 +1,10 @@
 package com.opentext.waterloo.coop.inspirationalquoteservice;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -14,6 +17,9 @@ import java.net.URL;
 
 @Component
 public class RemoteQuoteRepository implements QuoteRepository{
+
+    private static final Logger log = LoggerFactory.getLogger(InspirationalQuoteServiceApplication.class);
+
     @Override
     @Cacheable("quote")
     @Qualifier("remoteQuoteRepository")
@@ -45,5 +51,7 @@ public class RemoteQuoteRepository implements QuoteRepository{
     //scheduled flush at midnight
     @Scheduled(cron = "0 0 0 * * ?")
     @CacheEvict(value = "quote", allEntries = true)
-    public void clearCache() {}
+    public void clearCache() {
+        log.info("Clearing cache.");
+    }
 }
