@@ -1,6 +1,8 @@
 package com.opentext.waterloo.coop.inspirationalquoteservice;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +15,8 @@ public class Controller {
 //    static int totalCounter = 0;
 //    static int numberOfCalls = 0;
 //    static Hashtable<String, Integer> ip_address = new Hashtable<String, Integer>();
+
+    private static final Logger log = LoggerFactory.getLogger(InspirationalQuoteServiceApplication.class);
 
     @Autowired
     private final QuoteRepository localQuoteRepository;
@@ -53,7 +57,9 @@ public class Controller {
         String language = quote.get("language").toString();
         String image = quote.get("background").toString();
         String permalink = json.getJSONObject("copyright").get("url").toString();
-        //missing numberOfCalls
-        return new Quote(quoteOfTheDay, timestamp, numbersOfCalls.getNumberOfCalls(), author, language, image, permalink);
+
+        Quote result = new Quote(quoteOfTheDay, timestamp, numbersOfCalls.getNumberOfCalls(), author, language, image, permalink);
+        log.info(result.toString());
+        return result;
     }
 }
