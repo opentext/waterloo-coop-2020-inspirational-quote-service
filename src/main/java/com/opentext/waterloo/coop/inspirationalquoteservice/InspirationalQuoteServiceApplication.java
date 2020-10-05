@@ -1,8 +1,6 @@
 package com.opentext.waterloo.coop.inspirationalquoteservice;
 
 import org.apache.log4j.PropertyConfigurator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,16 +18,9 @@ import java.io.IOException;
 @EnableScheduling
 public class InspirationalQuoteServiceApplication {
 
-    private static final Logger log = LoggerFactory.getLogger(InspirationalQuoteServiceApplication.class);
-
     public static void main(String[] args) throws IOException {
 //        System.setProperty("log4j.defaultInitOverride", "true");
         SpringApplication.run(InspirationalQuoteServiceApplication.class, args);
-        log.error("Error: Service startup complete!");
-        log.warn("Warn: Service startup complete!");
-        log.info("Info: Service startup complete!");
-        log.debug("Debug: Service startup complete!");
-        log.trace("Trace: Service startup complete!");
     }
 
     @Bean

@@ -57,11 +57,18 @@
             <artifactId>junit</artifactId>
         </dependency>
 
-        <!--dependency for log4j2-->
+        <!--dependency for log4j-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.7.10</version>
+        </dependency>
+
+        <!--dependency for graylog2-->
+        <dependency>
+            <groupId>org.graylog2</groupId>
+            <artifactId>gelfj</artifactId>
+            <version>1.1.16</version>
         </dependency>
 
     </dependencies>
