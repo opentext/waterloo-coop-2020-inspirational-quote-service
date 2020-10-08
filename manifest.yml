@@ -1,0 +1,13 @@
+---
+dockercomposefiles:
+  - docker-compose.yml
+version: 1
+applications:
+  - name: inspirational-quote-service
+    path: target/inspirational-quote-service-1.0.0-SNAPSHOT.jar
+    memory: 1GB
+    disk_quota: 1GB
+    instances: 1
+    env:
+      JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 11.+}}'
+#    random-route: true

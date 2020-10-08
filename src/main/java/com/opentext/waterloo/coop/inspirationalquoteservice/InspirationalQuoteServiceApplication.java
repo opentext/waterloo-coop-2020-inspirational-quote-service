@@ -35,4 +35,10 @@ public class InspirationalQuoteServiceApplication {
         Resource resource = new ClassPathResource("log4j-prod.properties");
         PropertyConfigurator.configure(resource.getURL());
     }
+    @Bean
+    @Profile("graylog")
+    public void graylogPropertyConfigurator() throws IOException {
+        Resource resource = new ClassPathResource("log4j-graylog.properties");
+        PropertyConfigurator.configure(resource.getURL());
+    }
 }
