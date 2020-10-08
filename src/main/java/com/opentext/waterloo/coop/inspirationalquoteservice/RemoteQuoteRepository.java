@@ -51,25 +51,7 @@ public class RemoteQuoteRepository implements QuoteRepository{
         } catch (java.io.IOException e) {
             log.error("IOException occurred! " + e.getMessage());
         }
-        // only enable file overwriting file in active dev environment
-        if(Arrays.stream(env.getActiveProfiles()).anyMatch(
-                env -> (env.equalsIgnoreCase("dev"))) && builder != null) {
-            writeUsingBufferedWriter(builder);
-        }
         return new JSONObject(builder);
-    }
-
-    private void writeUsingBufferedWriter(String data) {
-        File file = null;
-        try {
-            file = new File("src/main/resources/plain.json");
-            BufferedWriter br = new BufferedWriter(new FileWriter(file));
-            br.write(data);
-            br.flush();
-            br.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     //scheduled flush at midnight
