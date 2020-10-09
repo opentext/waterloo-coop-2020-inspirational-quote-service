@@ -5,6 +5,7 @@ version: 1
 applications:
   - name: inspirational-quote-service
     path: target/inspirational-quote-service-1.0.0-SNAPSHOT.jar
+    command: mvn spring-boot:run -Dspring-boot.run.arguments=-javaagent:/newrelic/newrelic.jar
     memory: 1GB
     disk_quota: 1GB
     instances: 1
